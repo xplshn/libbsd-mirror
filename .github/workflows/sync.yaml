@@ -1,8 +1,8 @@
-name: Sync with git://git.etalabs.net/musl
+name: Sync with https://gitlab.freedesktop.org/libbsd/libbsd.git
 
 on:
   #schedule:
-  #  - cron: '0 0 */3 * *'  # Run every 3 days at midnight
+  #  - cron: '0 0 */3 * *'
   workflow_dispatch:
 
 jobs:
@@ -14,24 +14,23 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: 'master'
+        ref: master
 
-    # Add source repo:
-    - name: Add git://git.etalabs.net/musl remote
+    - name: Add upstream remote
       run: |
-        git remote add source git://git.etalabs.net/musl
+        git remote add source https://gitlab.freedesktop.org/libbsd/libbsd.git
 
-    - name: Fetch changes from git://git.etalabs.net/musl
+    - name: Fetch upstream
       run: |
         git fetch source
 
-    - name: Merge changes from git://git.etalabs.net/musl
+    - name: Merge upstream main into master
       run: |
-        git config user.name '󰬭 [CI] '
+        git config user.name '[CI] libbsd mirror'
         git config user.email 'action@github.com'
         git checkout master
-        git merge --allow-unrelated-histories source/master
+        git merge --allow-unrelated-histories source/main
 
-    - name: Push changes to Mirror
+    - name: Push mirror
       run: |
         git push origin master
